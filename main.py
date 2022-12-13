@@ -160,13 +160,16 @@ else:
 
 
 
-
-
+from sklearn import preprocessing
+n_classes = 7
+le = preprocessing.LabelEncoder()
+merged_df["Lake"] = le.fit_transform(merged_df["Lake"])
+merged_df["Lake Type"] = le.fit_transform(merged_df["Lake Type"])
 
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.tree import plot_tree
 y = merged_df["Fish over 3.5lbs"]
-X = merged_df.drop(["Fish over 3.5lbs", "Date", "Lake", "Lake Type"], axis=1)
+X = merged_df.drop(["Fish over 3.5lbs", "Date"], axis=1)
 tree_clf = DecisionTreeClassifier(random_state=0, max_depth=3)
 tree_clf.fit(X, y)
 plt.figure(figsize = (15, 10))
