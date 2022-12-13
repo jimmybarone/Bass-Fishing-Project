@@ -95,6 +95,34 @@ df3 = pd.read_csv("Spokane_daily_weather_cleaned.csv")
 merged_df = df.merge(df3, on="Date")
 merged_df.to_csv("merged_df.csv")
 
+merged_df.replace(to_replace="", value=np.nan, inplace=True)
+merged_df.drop("Unnamed: 0", axis=1, inplace=True)
+# print(merged_df.head())
+merged_df["Fish over 3.5lbs"].replace(to_replace=2.0, value=1, inplace=True)
+merged_df["Fish over 3.5lbs"].replace(to_replace=1.0, value=1, inplace=True)
+merged_df["Fish over 3.5lbs"].replace(to_replace=0.0, value=0, inplace=True)
+# merged_df.to_csv("merged_df_cleaned.csv")
+merged_df["Fish over 3.5lbs"].replace(to_replace=np.NaN, value=1, inplace=True)
+# print(merged_df["Fish over 3.5lbs"])
+
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.tree import plot_tree
+y = merged_df["Fish over 3.5lbs"]
+X = merged_df.drop(["Fish over 3.5lbs", "Date", "Lake", "Lake Type"], axis=1)
+tree_clf = DecisionTreeClassifier(random_state=0, max_depth=3)
+tree_clf.fit(X, y)
+plt.figure(figsize = (15, 10))
+plot_tree(tree_clf, feature_names=X.columns, class_names={1: "caught big fish", 0: "no big fish :("}, filled=True)
+
+
+#DID I CATCH MORE BASS THIS YEAR FROM LONG LAKE THAN SILVER LAKE ON AVERAGE?
+# alpha = 0.05
+# t_computed, p_value = stats.ttest_ind(long_fc_ser, silver_fc_ser)
+# print("t-computed:", t_computed, "p-value:", p_value)
+# if p_value < alpha: 
+#     print("Reject H0, p-value:", p_value)
+# else:
+#     print("Fail to reject H0, p-value:", p_value)
 
 
 
